@@ -32,6 +32,14 @@ const Index = () => {
   const { account, connectWallet, isConnecting } = useWeb3();
   const navigate = useNavigate();
 
+  const handleCreateCampaign = () => {
+    if (!account) {
+      navigate("/signin");
+      return;
+    }
+    navigate("/create");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <div className="container px-4 py-8">
@@ -41,19 +49,27 @@ const Index = () => {
           </h1>
           <div className="flex gap-4">
             <Button
-              onClick={() => navigate("/create")}
+              onClick={handleCreateCampaign}
               className="bg-secondary text-white hover:bg-secondary/90"
-              disabled={!account}
             >
               Create Campaign
             </Button>
-            <Button
-              onClick={connectWallet}
-              disabled={isConnecting}
-              className="bg-white text-primary border border-primary hover:bg-primary hover:text-white transition-colors"
-            >
-              {isConnecting ? "Connecting..." : account ? `${account.slice(0, 6)}...${account.slice(-4)}` : "Connect Wallet"}
-            </Button>
+            {account ? (
+              <Button
+                onClick={connectWallet}
+                disabled={isConnecting}
+                className="bg-white text-primary border border-primary hover:bg-primary hover:text-white transition-colors"
+              >
+                {isConnecting ? "Connecting..." : `${account.slice(0, 6)}...${account.slice(-4)}`}
+              </Button>
+            ) : (
+              <Button
+                onClick={() => navigate("/signin")}
+                className="bg-primary text-white hover:bg-primary/90"
+              >
+                Sign In
+              </Button>
+            )}
           </div>
         </header>
 
