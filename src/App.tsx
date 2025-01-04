@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Web3Provider } from "./contexts/Web3Context";
 import Index from "./pages/Index";
+import CreateCampaign from "./pages/CreateCampaign";
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/create" element={<CreateCampaign />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

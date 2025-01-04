@@ -3,8 +3,8 @@ import { useWeb3 } from "@/contexts/Web3Context";
 import { CampaignCard } from "@/components/CampaignCard";
 import { Campaign } from "@/types/Campaign";
 import { ethers } from "ethers";
+import { useNavigate } from "react-router-dom";
 
-// Mock data for initial UI
 const mockCampaigns: Campaign[] = [
   {
     id: "1",
@@ -30,6 +30,7 @@ const mockCampaigns: Campaign[] = [
 
 const Index = () => {
   const { account, connectWallet, isConnecting } = useWeb3();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
@@ -38,13 +39,22 @@ const Index = () => {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">
             CryptoFund
           </h1>
-          <Button
-            onClick={connectWallet}
-            disabled={isConnecting}
-            className="bg-white text-primary border border-primary hover:bg-primary hover:text-white transition-colors"
-          >
-            {isConnecting ? "Connecting..." : account ? `${account.slice(0, 6)}...${account.slice(-4)}` : "Connect Wallet"}
-          </Button>
+          <div className="flex gap-4">
+            <Button
+              onClick={() => navigate("/create")}
+              className="bg-secondary text-white hover:bg-secondary/90"
+              disabled={!account}
+            >
+              Create Campaign
+            </Button>
+            <Button
+              onClick={connectWallet}
+              disabled={isConnecting}
+              className="bg-white text-primary border border-primary hover:bg-primary hover:text-white transition-colors"
+            >
+              {isConnecting ? "Connecting..." : account ? `${account.slice(0, 6)}...${account.slice(-4)}` : "Connect Wallet"}
+            </Button>
+          </div>
         </header>
 
         <section className="mb-12 text-center">
