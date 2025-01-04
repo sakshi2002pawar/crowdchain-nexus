@@ -14,7 +14,7 @@ interface CampaignCardProps {
 export const CampaignCard = ({ campaign }: CampaignCardProps) => {
   const { account } = useWeb3();
   const [isContributing, setIsContributing] = useState(false);
-  const progress = (campaign.raised / campaign.goal) * 100;
+  const progress = (Number(ethers.utils.formatEther(campaign.raised)) / Number(ethers.utils.formatEther(campaign.goal))) * 100;
   const daysLeft = Math.max(0, Math.ceil((new Date(campaign.deadline).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
 
   const handleContribute = async () => {
@@ -46,7 +46,7 @@ export const CampaignCard = ({ campaign }: CampaignCardProps) => {
         <div className="space-y-4">
           <Progress value={progress} className="h-2" />
           <div className="flex justify-between text-sm">
-            <span>{ethers.utils.formatEther(campaign.raised.toString())} ETH raised</span>
+            <span>{ethers.utils.formatEther(campaign.raised)} ETH raised</span>
             <span>{daysLeft} days left</span>
           </div>
         </div>
