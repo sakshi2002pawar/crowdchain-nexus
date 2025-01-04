@@ -54,20 +54,30 @@ const Index = () => {
             >
               Create Campaign
             </Button>
-            {account ? (
-              <Button
-                onClick={connectWallet}
-                disabled={isConnecting}
-                className="bg-white text-primary border border-primary hover:bg-primary hover:text-white transition-colors"
-              >
-                {isConnecting ? "Connecting..." : `${account.slice(0, 6)}...${account.slice(-4)}`}
-              </Button>
+            {!account ? (
+              <>
+                <Button
+                  onClick={connectWallet}
+                  disabled={isConnecting}
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary hover:text-white"
+                >
+                  {isConnecting ? "Connecting..." : "Connect Wallet"}
+                </Button>
+                <Button
+                  onClick={() => navigate("/signin")}
+                  className="bg-primary text-white hover:bg-primary/90"
+                >
+                  Sign In
+                </Button>
+              </>
             ) : (
               <Button
-                onClick={() => navigate("/signin")}
-                className="bg-primary text-white hover:bg-primary/90"
+                variant="outline"
+                className="border-primary text-primary"
+                onClick={connectWallet}
               >
-                Sign In
+                {`${account.slice(0, 6)}...${account.slice(-4)}`}
               </Button>
             )}
           </div>
