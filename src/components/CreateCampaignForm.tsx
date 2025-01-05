@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 import { toast } from "sonner";
 import { useWeb3 } from "@/contexts/Web3Context";
+import { mockCampaigns } from "@/data/mockCampaigns";
 
 const formSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
@@ -35,8 +36,6 @@ export function CreateCampaignForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // Here you would typically interact with your smart contract
-      // For now, we'll just show a success message and redirect
       const campaign = {
         id: Date.now().toString(),
         ...values,
@@ -46,8 +45,11 @@ export function CreateCampaignForm() {
         creator: account || "0x0",
       };
       
+      // Add the new campaign to mockCampaigns
+      mockCampaigns.push(campaign);
+      
       toast.success("Campaign created successfully!");
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       toast.error("Failed to create campaign");
       console.error(error);

@@ -12,6 +12,7 @@ import Welcome from "./pages/Welcome";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import CampaignDetails from "./pages/CampaignDetails";
+import ContributePage from "./pages/ContributePage";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,14 @@ const App = () => (
                 element={
                   <PrivateRoute>
                     <CampaignDetails />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/contribute/:id" 
+                element={
+                  <PrivateRoute>
+                    <ContributePage />
                   </PrivateRoute>
                 } 
               />

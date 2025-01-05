@@ -4,8 +4,6 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useWeb3 } from "@/contexts/Web3Context";
 import { ethers } from "ethers";
-import { useState } from "react";
-import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
 interface CampaignCardProps {
@@ -15,27 +13,12 @@ interface CampaignCardProps {
 export const CampaignCard = ({ campaign }: CampaignCardProps) => {
   const { account } = useWeb3();
   const navigate = useNavigate();
-  const [isContributing, setIsContributing] = useState(false);
   const progress = (Number(ethers.utils.formatEther(campaign.raised)) / Number(ethers.utils.formatEther(campaign.goal))) * 100;
   const daysLeft = Math.max(0, Math.ceil((new Date(campaign.deadline).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
 
-  const handleContribute = async (e: React.MouseEvent) => {
+  const handleContribute = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!account) {
-      toast.error("Please connect your wallet first");
-      return;
-    }
-
-    setIsContributing(true);
-    try {
-      // TODO: Implement actual contribution logic with smart contract
-      toast.success("Contribution successful!");
-    } catch (error) {
-      console.error("Error contributing:", error);
-      toast.error("Failed to contribute");
-    } finally {
-      setIsContributing(false);
-    }
+    navigate(`/contribute/${campaign.id}`);
   };
 
   return (
@@ -61,9 +44,8 @@ export const CampaignCard = ({ campaign }: CampaignCardProps) => {
         <Button 
           className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90"
           onClick={handleContribute}
-          disabled={isContributing}
         >
-          {isContributing ? "Contributing..." : "Contribute"}
+          Contribute
         </Button>
       </CardFooter>
     </Card>
