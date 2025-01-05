@@ -4,9 +4,11 @@ import { CampaignCard } from "@/components/CampaignCard";
 import { useNavigate } from "react-router-dom";
 import { BackButton } from "@/components/BackButton";
 import { mockCampaigns } from "@/data/mockCampaigns";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
   const { account, connectWallet, isConnecting } = useWeb3();
+  const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
   return (
@@ -34,12 +36,21 @@ const Index = () => {
                 >
                   {isConnecting ? "Connecting..." : "Connect Wallet"}
                 </Button>
-                <Button
-                  onClick={() => navigate("/signin")}
-                  className="bg-primary text-white hover:bg-primary/90"
-                >
-                  Sign In
-                </Button>
+                {isAuthenticated ? (
+                  <Button
+                    onClick={logout}
+                    className="bg-primary text-white hover:bg-primary/90"
+                  >
+                    Sign Out
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => navigate("/signin")}
+                    className="bg-primary text-white hover:bg-primary/90"
+                  >
+                    Sign In
+                  </Button>
+                )}
               </>
             ) : (
               <Button
@@ -54,7 +65,7 @@ const Index = () => {
         </header>
 
         <section className="mb-12 text-center">
-          <h2 className="text-3xl font-bold mb-4">Revolutionizing Crowdfunding with Blockchain</h2>
+          <h2 className="text-3xl font-bold mb-4">Welcome {user?.name ? `, ${user.name}!` : ''}</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
             Join our community of innovators and creators. Support groundbreaking projects or launch your own campaign with the power of blockchain technology.
           </p>

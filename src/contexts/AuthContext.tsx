@@ -23,8 +23,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (token && userData) {
       setIsAuthenticated(true);
       setUser(JSON.parse(userData));
+      // If user is authenticated and on welcome page, redirect to home
+      if (window.location.pathname === '/welcome') {
+        navigate('/home');
+      }
     }
-  }, []);
+  }, [navigate]);
 
   const login = async (email: string, password: string) => {
     try {

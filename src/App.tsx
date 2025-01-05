@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Web3Provider } from "./contexts/Web3Context";
 import { AuthProvider } from "./contexts/AuthContext";
+import { PrivateRoute } from "./components/PrivateRoute";
 import Index from "./pages/Index";
 import CreateCampaign from "./pages/CreateCampaign";
 import Welcome from "./pages/Welcome";
@@ -26,9 +27,30 @@ const App = () => (
               <Route path="/welcome" element={<Welcome />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
-              <Route path="/home" element={<Index />} />
-              <Route path="/create" element={<CreateCampaign />} />
-              <Route path="/campaign/:id" element={<CampaignDetails />} />
+              <Route 
+                path="/home" 
+                element={
+                  <PrivateRoute>
+                    <Index />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/create" 
+                element={
+                  <PrivateRoute>
+                    <CreateCampaign />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/campaign/:id" 
+                element={
+                  <PrivateRoute>
+                    <CampaignDetails />
+                  </PrivateRoute>
+                } 
+              />
               <Route path="/" element={<Navigate to="/welcome" replace />} />
               <Route path="*" element={<Navigate to="/welcome" replace />} />
             </Routes>
