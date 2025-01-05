@@ -4,15 +4,28 @@ import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { BackButton } from "@/components/BackButton";
+import { useAuth } from "@/contexts/AuthContext";
+import { useState } from "react";
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically handle authentication
-    toast.success("Successfully signed in!");
-    navigate("/home"); // Redirect to home page after sign in
+    setIsLoading(true);
+    
+    try {
+      await login(email, password);
+      toast.success("Successfully signed in!");
+    } catch (error) {
+      toast.error("Failed to sign in. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -31,6 +44,9 @@ const SignIn = () => {
               placeholder="Enter your email" 
               required 
               className="w-full"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={isLoading}
             />
           </div>
           <div className="space-y-2">
@@ -41,10 +57,17 @@ const SignIn = () => {
               placeholder="Enter your password" 
               required 
               className="w-full"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={isLoading}
             />
           </div>
-          <Button type="submit" className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90">
-            Sign In
+          <Button 
+            type="submit" 
+            className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+            disabled={isLoading}
+          >
+            {isLoading ? "Signing in..." : "Sign In"}
           </Button>
         </form>
         <p className="text-center mt-4 text-sm text-gray-600">
@@ -52,6 +75,7 @@ const SignIn = () => {
           <button
             onClick={() => navigate("/signup")}
             className="text-primary hover:underline"
+            disabled={isLoading}
           >
             Sign Up
           </button>
