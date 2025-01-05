@@ -38,7 +38,9 @@ export function CreateCampaignForm() {
     try {
       const campaign = {
         id: Date.now().toString(),
-        ...values,
+        title: values.title,
+        description: values.description,
+        imageUrl: values.imageUrl,
         goal: ethers.utils.parseEther(values.goal),
         raised: ethers.utils.parseEther("0"),
         deadline: new Date(values.deadline),
