@@ -1,42 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { useWeb3 } from "@/contexts/Web3Context";
 import { CampaignCard } from "@/components/CampaignCard";
-import { Campaign } from "@/types/Campaign";
-import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
-
-const mockCampaigns: Campaign[] = [
-  {
-    id: "1",
-    title: "Decentralized Education Platform",
-    description: "Building a platform to make education accessible to everyone through blockchain technology.",
-    goal: ethers.utils.parseEther("10"),
-    raised: ethers.utils.parseEther("4"),
-    deadline: new Date("2024-12-31"),
-    creator: "0x123...",
-    imageUrl: "https://images.unsplash.com/photo-1501504905252-473c47e087f8",
-  },
-  {
-    id: "2",
-    title: "Green Energy NFT Marketplace",
-    description: "Creating a marketplace for trading renewable energy certificates as NFTs.",
-    goal: ethers.utils.parseEther("15"),
-    raised: ethers.utils.parseEther("7.5"),
-    deadline: new Date("2024-11-30"),
-    creator: "0x456...",
-    imageUrl: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e",
-  },
-  {
-    id: "3",
-    title: "Community Art Gallery",
-    description: "Supporting local artists by creating a decentralized virtual art gallery.",
-    goal: ethers.utils.parseEther("5"),
-    raised: ethers.utils.parseEther("2.1"),
-    deadline: new Date("2024-10-15"),
-    creator: "0x789...",
-    imageUrl: "https://images.unsplash.com/photo-1561214115-f2f134cc4912",
-  },
-];
+import { BackButton } from "@/components/BackButton";
+import { mockCampaigns } from "@/data/mockCampaigns";
 
 const Index = () => {
   const { account, connectWallet, isConnecting } = useWeb3();
@@ -45,6 +12,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <div className="container px-4 py-8">
+        <BackButton />
         <header className="flex justify-between items-center mb-12">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">
             CryptoFund

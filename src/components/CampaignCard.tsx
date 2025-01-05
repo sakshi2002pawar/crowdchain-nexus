@@ -6,6 +6,7 @@ import { useWeb3 } from "@/contexts/Web3Context";
 import { ethers } from "ethers";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface CampaignCardProps {
   campaign: Campaign;
@@ -13,11 +14,13 @@ interface CampaignCardProps {
 
 export const CampaignCard = ({ campaign }: CampaignCardProps) => {
   const { account } = useWeb3();
+  const navigate = useNavigate();
   const [isContributing, setIsContributing] = useState(false);
   const progress = (Number(ethers.utils.formatEther(campaign.raised)) / Number(ethers.utils.formatEther(campaign.goal))) * 100;
   const daysLeft = Math.max(0, Math.ceil((new Date(campaign.deadline).getTime() - new Date().getTime()) / (1000 * 3600 * 24)));
 
-  const handleContribute = async () => {
+  const handleContribute = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!account) {
       toast.error("Please connect your wallet first");
       return;
@@ -36,7 +39,10 @@ export const CampaignCard = ({ campaign }: CampaignCardProps) => {
   };
 
   return (
-    <Card className="w-full max-w-sm transition-transform duration-200 hover:scale-105 animate-fade-in">
+    <Card 
+      className="w-full max-w-sm transition-transform duration-200 hover:scale-105 animate-fade-in cursor-pointer"
+      onClick={() => navigate(`/campaign/${campaign.id}`)}
+    >
       <CardHeader>
         <img src={campaign.imageUrl} alt={campaign.title} className="w-full h-48 object-cover rounded-t-lg" />
         <CardTitle className="mt-4">{campaign.title}</CardTitle>
