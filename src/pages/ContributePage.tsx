@@ -7,6 +7,7 @@ import { ethers } from "ethers";
 import { toast } from "sonner";
 import { mockCampaigns } from "@/data/mockCampaigns";
 import { BackButton } from "@/components/BackButton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const ContributePage = () => {
   const { id } = useParams();
@@ -14,6 +15,7 @@ const ContributePage = () => {
   const { account, provider } = useWeb3();
   const [amount, setAmount] = useState("");
   const [isContributing, setIsContributing] = useState(false);
+  const [transactionHash, setTransactionHash] = useState<string | null>(null);
 
   const campaign = mockCampaigns.find(c => c.id === id);
 
@@ -35,18 +37,37 @@ const ContributePage = () => {
 
     setIsContributing(true);
     try {
+      // Get the signer from provider
       const signer = provider.getSigner();
+      
+      // Create transaction object
       const tx = await signer.sendTransaction({
         to: campaign.creator,
-        value: ethers.utils.parseEther(amount)
+        value: ethers.utils.parseEther(amount),
+        gasLimit: 21000, // Basic ETH transfer gas limit
       });
 
-      await tx.wait();
-      toast.success("Contribution successful!");
-      navigate(`/campaign/${id}`);
-    } catch (error) {
+      // Show pending transaction notification
+      toast.loading("Transaction pending...", {
+        id: "contribution",
+      });
+
+      // Wait for transaction confirmation
+      const receipt = await tx.wait();
+      setTransactionHash(receipt.transactionHash);
+
+      // Update toast with success message
+      toast.success("Contribution successful!", {
+        id: "contribution",
+      });
+
+      // Wait for 2 seconds before redirecting
+      setTimeout(() => {
+        navigate(`/campaign/${id}`);
+      }, 2000);
+    } catch (error: any) {
       console.error("Error contributing:", error);
-      toast.error("Failed to contribute");
+      toast.error(error.message || "Failed to contribute");
     } finally {
       setIsContributing(false);
     }
@@ -74,6 +95,15 @@ const ContributePage = () => {
               </p>
             </div>
 
+            {transactionHash && (
+              <Alert className="mb-6">
+                <AlertDescription>
+                  Transaction successful! Hash: {transactionHash.slice(0, 10)}...
+                  {transactionHash.slice(-8)}
+                </AlertDescription>
+              </Alert>
+            )}
+
             <form onSubmit={handleContribute} className="space-y-4">
               <div>
                 <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
@@ -87,6 +117,7 @@ const ContributePage = () => {
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="Enter amount in ETH"
                   className="w-full"
+                  disabled={isContributing}
                 />
               </div>
 
@@ -95,7 +126,7 @@ const ContributePage = () => {
                 className="w-full bg-gradient-to-r from-primary to-secondary text-white"
                 disabled={isContributing}
               >
-                {isContributing ? "Contributing..." : "Contribute"}
+                {isContributing ? "Processing Transaction..." : "Contribute"}
               </Button>
             </form>
           </div>
