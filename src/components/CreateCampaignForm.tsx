@@ -50,7 +50,20 @@ export function CreateCampaignForm() {
       // Add the new campaign to mockCampaigns
       mockCampaigns.push(campaign);
       
-      toast.success("Campaign created successfully!");
+      // Show success notification with more details
+      toast.success("Campaign created successfully!", {
+        description: `Your campaign "${values.title}" has been created with a goal of ${values.goal} ETH.`,
+        duration: 5000,
+      });
+
+      // Simulate notification to followers (in a real app, this would be handled by a backend)
+      setTimeout(() => {
+        toast.info("New campaign notification sent to followers!", {
+          description: "Your network has been notified about your new campaign.",
+          duration: 3000,
+        });
+      }, 1000);
+
       navigate("/home");
     } catch (error) {
       toast.error("Failed to create campaign");

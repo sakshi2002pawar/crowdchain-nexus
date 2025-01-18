@@ -53,13 +53,22 @@ const Index = () => {
                 )}
               </>
             ) : (
-              <Button
-                variant="outline"
-                className="border-primary text-primary"
-                onClick={connectWallet}
-              >
-                {`${account.slice(0, 6)}...${account.slice(-4)}`}
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  className="border-primary text-primary"
+                  onClick={() => navigate("/profile")}
+                >
+                  Profile
+                </Button>
+                <Button
+                  variant="outline"
+                  className="border-primary text-primary"
+                  onClick={connectWallet}
+                >
+                  {`${account.slice(0, 6)}...${account.slice(-4)}`}
+                </Button>
+              </div>
             )}
           </div>
         </header>

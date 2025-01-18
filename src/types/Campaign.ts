@@ -9,4 +9,13 @@ export interface Campaign {
   deadline: Date;
   creator: string;
   imageUrl: string;
+  updates?: CampaignUpdate[];
+}
+
+export interface CampaignUpdate {
+  id: string;
+  campaignId: string;
+  message: string;
+  timestamp: Date;
+  creator: string;
 }
