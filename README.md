@@ -1,4 +1,4 @@
- 🚀 Just launched my new decentralized crowdfunding platform – built with ❤️ and powered by blockchain technology!
+ 🚀 Just launched my new decentralized crowdfunding platform – powered by blockchain technology!
 
 ✨ Whether you're a creator looking to launch your campaign or a supporter exploring impactful ideas, this platform makes it seamless and secure.
 
